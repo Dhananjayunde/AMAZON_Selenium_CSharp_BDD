@@ -1,0 +1,35 @@
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+
+# Build output
+bin/
+obj/
+
+# Test results
+TestResults/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Generated reports
+Reports/
+
+# Screenshots
+Screenshots/
+
+# Logs
+Logs/
+
+# OS files
+.DS_Store
+Thumbs.db
