@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using System.Threading;
+using OpenQA.Selenium;
 
 namespace AMAZON_Selenium_C.Pages
 {
@@ -6,8 +8,7 @@ namespace AMAZON_Selenium_C.Pages
     {
         private readonly IWebDriver _driver;
 
-        private readonly By searchBox =
-            By.Id("twotabsearchtextbox");
+        private readonly By searchBox = By.Id("twotabsearchtextbox");
 
         public AmazonPage(IWebDriver driver)
         {
@@ -22,7 +23,23 @@ namespace AMAZON_Selenium_C.Pages
 
         public void SearchProduct(string productName)
         {
-            var search = _driver.FindElement(searchBox);
+            IWebElement search = null;
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
+                    search = _driver.FindElement(searchBox);
+                    if (search.Displayed)
+                        break;
+                }
+                catch (OpenQA.Selenium.NoSuchElementException)
+                {
+                    Thread.Sleep(500);
+                }
+            }
+
+            if (search == null)
+                throw new OpenQA.Selenium.NoSuchElementException($"Search box with locator {searchBox} not found.");
 
             search.Clear();
             search.SendKeys(productName);
