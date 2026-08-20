@@ -8,7 +8,7 @@ namespace AMAZON_Selenium_C.Pages
     {
         private readonly IWebDriver _driver;
 
-        private readonly By searchBox = By.Id("twotabsearchtextbox");
+        private readonly By searchBox = By.Id("twotabsearchtextbo");
 
         public AmazonPage(IWebDriver driver)
         {

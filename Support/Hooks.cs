@@ -9,7 +9,8 @@ namespace AMAZON_Selenium_C.Support
     {
         private readonly ScenarioContext _scenarioContext;
 
-        private static readonly ExtentReports _extent = ExtentReportManager.GetExtentReport();
+        private static readonly ExtentReports _extent =
+            ExtentReportManager.GetExtentReport();
 
         private ExtentTest? _extentTest;
 
@@ -32,17 +33,64 @@ namespace AMAZON_Selenium_C.Support
                 _scenarioContext.ScenarioInfo.Title;
 
             // Create Extent test
-            _extentTest =
-                _extent.CreateTest(scenarioName);
+            _extentTest = _extent.CreateTest(scenarioName);
 
-            // Store ExtentTest in ScenarioContext
+            // Store ExtentTest
             _scenarioContext["ExtentTest"] = _extentTest;
+
+            _extentTest.Info("Scenario started");
+        }
+
+        [AfterStep]
+        public void AfterStep()
+        {
+            if (!_scenarioContext.TryGetValue(
+                "ExtentTest",
+                out ExtentTest? extentTest))
+            {
+                return;
+            }
+
+            string stepText =
+                _scenarioContext.StepContext.StepInfo.Text;
+
+            if (_scenarioContext.TestError == null)
+            {
+                extentTest.Pass(
+                    $"Step Passed: {stepText}"
+                );
+            }
+            else
+            {
+                extentTest.Fail(
+                    $"Step Failed: {stepText}"
+                );
+
+                extentTest.Fail(
+                    _scenarioContext.TestError.ToString()
+                );
+
+                CaptureFailureScreenshot(extentTest);
+            }
         }
 
         [AfterScenario]
         public void AfterScenario()
         {
-            // Get driver
+            if (_scenarioContext.TryGetValue(
+                "ExtentTest",
+                out ExtentTest? extentTest))
+            {
+                if (_scenarioContext.TestError != null)
+                {
+                    extentTest.Fail("Scenario Failed");
+                }
+                else
+                {
+                    extentTest.Pass("Scenario Passed");
+                }
+            }
+
             if (_scenarioContext.TryGetValue(
                 "Driver",
                 out IWebDriver? driver))
@@ -51,26 +99,58 @@ namespace AMAZON_Selenium_C.Support
                 driver.Dispose();
             }
 
-            // Get ExtentTest
-            if (_scenarioContext.TryGetValue(
-                "ExtentTest",
-                out ExtentTest? extentTest))
+            _extent.Flush();
+        }
+
+        private void CaptureFailureScreenshot(
+            ExtentTest extentTest)
+        {
+            try
             {
-                if (_scenarioContext.TestError != null)
+                if (_scenarioContext.TryGetValue(
+                    "Driver",
+                    out IWebDriver? driver))
                 {
-                    extentTest.Fail(
-                        _scenarioContext.TestError.ToString()
-                    );
-                }
-                else
-                {
-                    extentTest.Pass(         "Scenario passed successfully."
-                    );
+                    if (driver is ITakesScreenshot screenshotDriver)
+                    {
+                        Screenshot screenshot =
+                            screenshotDriver.GetScreenshot();
+
+                        string screenshotDirectory =
+                            Path.Combine(
+                                Directory.GetCurrentDirectory(),
+                                "Screenshots"
+                            );
+
+                        Directory.CreateDirectory(
+                            screenshotDirectory
+                        );
+
+                        string fileName =
+                            $"Failure_{DateTime.Now:yyyyMMdd_HHmmssfff}.png";
+
+                        string screenshotPath =
+                            Path.Combine(
+                                screenshotDirectory,
+                                fileName
+                            );
+
+                        screenshot.SaveAsFile(
+                            screenshotPath
+                        );
+
+                        extentTest.AddScreenCaptureFromPath(
+                            screenshotPath
+                        );
+                    }
                 }
             }
-
-            // Write report to HTML
-            _extent.Flush();
+            catch (Exception ex)
+            {
+                extentTest.Warning(
+                    $"Unable to capture screenshot: {ex.Message}"
+                );
+            }
         }
     }
 }
