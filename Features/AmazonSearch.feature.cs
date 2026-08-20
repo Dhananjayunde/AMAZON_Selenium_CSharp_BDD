@@ -27,7 +27,8 @@ namespace AMAZON_Selenium_C.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "Amazon Product Search", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "Amazon Product Search", "  As a user\r\n  I want to search for products on Amazon\r\n  So that I can view the " +
+                "search results for the vivo X300", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
 #line 1 "AmazonSearch.feature"
 #line hidden
@@ -109,16 +110,18 @@ namespace AMAZON_Selenium_C.Features
         }
         
         [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Search for Vivo X300 on Amazon")]
+        [global::NUnit.Framework.DescriptionAttribute("Search for vivo X300 on Amazon")]
+        [global::NUnit.Framework.CategoryAttribute("smoke")]
         public async global::System.Threading.Tasks.Task SearchForVivoX300OnAmazon()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "smoke"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "0";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Search for Vivo X300 on Amazon", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Search for vivo X300 on Amazon", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 3
+#line 7
   this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -128,14 +131,14 @@ namespace AMAZON_Selenium_C.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 4
-    await testRunner.GivenAsync("I navigate to Amazon", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line 8
+    await testRunner.GivenAsync("I open the Amazon home page", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 5
-    await testRunner.WhenAsync("I search for \"Vivo X300\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line 9
+    await testRunner.WhenAsync("I search for \"vivo X300\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 6
-    await testRunner.ThenAsync("Amazon search results should be displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line 10
+    await testRunner.ThenAsync("I should see search results related to \"vivo X300\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

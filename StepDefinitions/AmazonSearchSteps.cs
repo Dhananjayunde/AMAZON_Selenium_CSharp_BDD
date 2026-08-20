@@ -19,20 +19,20 @@ namespace AMAZON_Selenium_C.StepDefinitions
             _amazonPage = new AmazonPage(_driver);
         }
 
-        [Given("I navigate to Amazon")]
+        [Given(@"I open the Amazon home page")]
         public void GivenINavigateToAmazon()
         {
             _amazonPage.NavigateToAmazon();
         }
 
-        [When("I search for {string}")]
+        [When(@"I search for {string}")]
         public void WhenISearchFor(string productName)
         {
             _amazonPage.SearchProduct(productName);
         }
 
-        [Then("Amazon search results should be displayed")]
-        public void ThenAmazonSearchResultsShouldBeDisplayed()
+        [Then("I should see search results related to \"(.*)\"")]
+        public void ThenAmazonSearchResultsShouldBeDisplayed(string productName)
         {
             Assert.That(
                 _amazonPage.IsSearchResultDisplayed(),
